@@ -1,9 +1,9 @@
 import flask
 from flask import jsonify, request
-from flask_mysql import MySQL
-
+from flask_admin import Admin
 
 app = flask.Flask(__name__)
+admin = Admin(app, "My Admin")
 app.config["DEBUG"] = True
 
 # DATA
