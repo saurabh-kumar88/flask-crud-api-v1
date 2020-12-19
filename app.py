@@ -1,10 +1,12 @@
 import os
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
+from sqlalchemy.orm.exc import NoResultFound
 
 # init Flask
 app = Flask(__name__)
@@ -30,7 +32,7 @@ class Book(db.Model):
     publication = db.Column(db.String(20), nullable=False)
     created_At = db.Column(db.DateTime, server_default=db.func.now())
     updated_At = db.Column(
-        db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+        db.DateTime, onupdate=db.func.now())
 
     def __repr__(self):
         return self.title
@@ -61,9 +63,14 @@ def dummyData():
             print(e)
 
 
-# db.create_all()
-# db.drop_all()
-# dummyData()
+# drop all tables
+if 0:
+    db.drop_all()
+
+# create table and insert dummy data
+if 0:
+    db.create_all()
+    dummyData()
 
 # admin
 admin = Admin(app, name='Flask crud api', template_mode='bootstrap4')
@@ -103,32 +110,34 @@ def getAll():
     books = Book.query.all()
     result = []
     for book in books:
+        result.append({"id": book.id})
         result.append({"title": book.title})
         result.append({"author": book.author})
         result.append({"publcation": book.publication})
+        result.append({"created_At": book.created_At})
+        result.append({"updated_At": book.updated_At})
     return jsonify(result)
 
 
-# @app.route('/books-api/v1/resources/getbook', methods=['GET'])
-# def getBook():
-#     # Check if an ID was provided as part of the URL.
-#     # If ID is provided, assign it to a variable.
-#     # If no ID is provided, display an error in the browser.
+@app.route('/books-api/v1/resources/getbook', methods=['GET'])
+def getBook():
 
-#     if "id" in request.args:
-#         id = int(request.args['id'])
-#     else:
-#         return "ERROR : No id provided for book record, please specify a book id."
+    if "id" in request.args:
+        id = int(request.args['id'])
+    else:
+        return "ERROR : No id provided for book record, please specify a book id."
 
-#     result = []
-#     # check if id exists
-#     for book in books:
-#         if book['id'] == id:
-#             result.append(book)
-#     if len(result) == 0:
-#         return "ERROR : This book id does not exist!"
-#     else:
-#         return jsonify(result)
+    result = []
+
+    try:
+        book = Book.query.get(id)
+        result.append({"id": book.id})
+        result.append({"title": book.title})
+        result.append({"author": book.author})
+        result.append({"publication": book.publication})
+        return jsonify(result)
+    except AttributeError as err:
+        return "Error : Invalid book id"
 
 
 @app.route('/books-api/v1/resources/add', methods=['POST'])
@@ -145,40 +154,54 @@ def addBook():
     return "book added"
 
 
-# @app.route('/books-api/v1/resources/delete', methods=['DELETE'])
-# def deleteBook():
-#     if request.method == 'DELETE':
-#         id = int(request.json['id'])
-#         for book in books:
-#             if id == book['id']:
-#                 books.remove(book)
-#                 break
-#     else:
-#         return "ERROR : Invalid id, please specify correct id"
-#     return "book has been deleted"
+@app.route('/books-api/v1/resources/delete', methods=['DELETE'])
+def deleteBook():
+
+    if 'id' in request.args.keys():
+        id = int(request.args['id'])
+    else:
+        return "Error : Book id is missing!"
+    if request.method == 'DELETE':
+        id = int(request.args['id'])
+        try:
+            book = Book.query.filter_by(id=id).one()
+            db.session.delete(book)
+            db.session.commit()
+            return jsonify('The book having id {} has been deleted'.format(id))
+        except NoResultFound as err:
+            return "Error : Invalid book id"
 
 
-# @app.route('/books-api/v1/resources/update', methods=['PUT'])
-# def updateBook():
-#     isUpdated = False
-#     if request.method == 'PUT':
-#         # check for valid id
-#         id = int(request.args['id'])
+@app.route('/books-api/v1/resources/update', methods=['PUT'])
+def updateBook():
+    result = []
+    if 'id' in request.args.keys():
+        id = int(request.args['id'])
+    else:
+        return "Error : Book id is missing!"
 
-#         for book in books:
-#             if id == book['id']:
-#                 book['author'] = request.json['author']
-#                 isUpdated = True
-#                 break
+    if request.method == 'PUT':
+        try:
+            book = Book.query.get(id)
+            if 'title' in request.json.keys():
+                book.title = request.json['title']
+            if 'author' in request.json.keys():
+                book.author = request.json['author']
+            if 'publication' in request.json.keys():
+                book.publication = request.json['publication']
 
-#                 # if request.json['title']:
-#                 #     book['title'] = request.json['title']
-#                 # if request.json['published']:
-#                 #     book['published'] = request.json['published']
-#                 # if request.json['author']:
-#                 #     book['author'] = request.json['author']
+            db.session.add(book)
+            db.session.commit()
 
-#     return "Updated" if isUpdated else "Invalid ID"
+            result.append({'id': book.id})
+            result.append({'title': book.title})
+            result.append({'author': book.author})
+            result.append({'publication': book.publication})
+            result.append({'created_At': book.created_At})
+            result.append({'updated_At': book.updated_At})
+            return jsonify(result)
+        except AttributeError as err:
+            return "Error : Invalid book id"
 
 
 # Run the development server
