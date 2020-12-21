@@ -1,10 +1,8 @@
 import os
-from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -13,16 +11,13 @@ app = Flask(__name__)
 
 # Basic config with security for forms and session cookie
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:saw99@localhost/testdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['CSRF_ENABLED'] = True
-app.config['SECRET_KEY'] = 'thisismyscretkey'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 # database models
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
 
 
 class Book(db.Model):
@@ -79,16 +74,7 @@ admin.add_view(ModelView(Book, db.session))
 
 @app.route('/', methods=['GET'])
 def index():
-    return '''
-    <h1>Welcome to flask-crud api demo</h1>
-    <ol>
-        <li>crud-api/getAll : get all books record</li>
-        <li>crud-api/getbook/id : get a book record by its id</li>
-        <li>crud-api/add : add new book</li>
-        <li>crud-api/delete/id : remove a book record</li>
-        <li>crud-api/put/id : update a book record</li>
-    </ol>
-    '''
+    return jsonify({'Message': 'ok'})
 
 
 @app.route('/books-api/v1/resources/', methods=['GET'])
