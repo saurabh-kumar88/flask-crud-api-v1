@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -79,16 +79,27 @@ def index():
 
 @app.route('/books-api/v1/resources/home', methods=['GET'])
 def home():
-    return '''
-    <h1>Welcome to flask-crud api demo</h1>
-    <ol>
-        <li>crud-api/getAll : get all books record</li>
-        <li>crud-api/getbook/id : get a book record by its id</li>
-        <li>crud-api/add : add new book</li>
-        <li>crud-api/delete/id : remove a book record</li>
-        <li>crud-api/put/id : update a book record</li>
-    </ol>
-    '''
+    # print("\n ****************** ")
+    # print(request.code)
+    if request.method == 'GET':
+        return '''
+        <h1>Welcome to flask-crud api demo</h1>
+        <ol>
+            <li>crud-api/getAll : get all books record</li>
+            <li>crud-api/getbook/id : get a book record by its id</li>
+            <li>crud-api/add : add new book</li>
+            <li>crud-api/delete/id : remove a book record</li>
+            <li>crud-api/put/id : update a book record</li>
+        </ol>
+        '''
+    else:
+        return "error"
+
+
+# @app.after_request
+# def log_status_code(response):
+#     print("\n ****************** ")
+#     print(response.status)
 
 
 @app.route('/books-api/v1/resources/getAll', methods=['GET'])
@@ -137,7 +148,7 @@ def addBook():
     else:
         return "ERROR : Invalid data, please specify id"
 
-    return "book added"
+    return jsonify("ok")
 
 
 @app.route('/books-api/v1/resources/delete', methods=['DELETE'])
@@ -153,7 +164,7 @@ def deleteBook():
             book = Book.query.filter_by(id=id).one()
             db.session.delete(book)
             db.session.commit()
-            return jsonify('The book having id {} has been deleted'.format(id))
+            return jsonify('ok')
         except NoResultFound as err:
             return "Error : Invalid book id"
 
@@ -185,7 +196,7 @@ def updateBook():
             result.append({'publication': book.publication})
             result.append({'created_At': book.created_At})
             result.append({'updated_At': book.updated_At})
-            return jsonify(result)
+            return jsonify("ok")
         except AttributeError as err:
             return "Error : Invalid book id"
 
