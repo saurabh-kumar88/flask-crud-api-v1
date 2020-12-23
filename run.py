@@ -72,12 +72,12 @@ admin = Admin(app, name='Flask crud api', template_mode='bootstrap4')
 admin.add_view(ModelView(Book, db.session))
 
 
-@app.route('/', methods=['GET'])
+@app.route('/books-api/v1/resources/', methods=['GET'])
 def index():
     return jsonify({'Message': 'ok'})
 
 
-@app.route('/books-api/v1/resources/', methods=['GET'])
+@app.route('/books-api/v1/resources/home', methods=['GET'])
 def home():
     return '''
     <h1>Welcome to flask-crud api demo</h1>
