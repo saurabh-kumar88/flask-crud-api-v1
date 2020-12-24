@@ -74,14 +74,20 @@ admin.add_view(ModelView(Book, db.session))
 
 @app.route('/books-api/v1/resources/', methods=['GET'])
 def index():
-    return jsonify({'Message': 'ok'})
+    if request.method != 'GET':
+        return Response(status=405)
+    elif request.method == 'GET':
+        return jsonify({'Message': 'ok'})
+    else:
+        return Response(status=404)
 
 
 @app.route('/books-api/v1/resources/home', methods=['GET'])
 def home():
-    # print("\n ****************** ")
-    # print(request.code)
-    if request.method == 'GET':
+    if request.method != 'GET':
+        return Response(405)
+
+    elif request.method == 'GET':
         return '''
         <h1>Welcome to flask-crud api demo</h1>
         <ol>
@@ -93,80 +99,87 @@ def home():
         </ol>
         '''
     else:
-        return "error"
-
-
-# @app.after_request
-# def log_status_code(response):
-#     print("\n ****************** ")
-#     print(response.status)
+        return Response(status=404)
 
 
 @app.route('/books-api/v1/resources/getAll', methods=['GET'])
 def getAll():
-    books = Book.query.all()
-    result = []
-    for book in books:
-        result.append({"id": book.id})
-        result.append({"title": book.title})
-        result.append({"author": book.author})
-        result.append({"publcation": book.publication})
-        result.append({"created_At": book.created_At})
-        result.append({"updated_At": book.updated_At})
-    return jsonify(result)
+
+    if request.method != 'GET':
+        return Response(status=405)
+    elif request.method == 'GET':
+        books = Book.query.all()
+        result = []
+        for book in books:
+            result.append({"id": book.id})
+            result.append({"title": book.title})
+            result.append({"author": book.author})
+            result.append({"publcation": book.publication})
+            result.append({"created_At": book.created_At})
+            result.append({"updated_At": book.updated_At})
+        return jsonify(result)
 
 
 @app.route('/books-api/v1/resources/getbook', methods=['GET'])
 def getBook():
 
+    if request.method != 'GET':
+        return Response(status=405)
+
     if "id" in request.args:
         id = int(request.args['id'])
+        if not isinstance(id, int) or id < 0:  # string or char as id or negative id
+            return Response(status=400)
+
+        result = []
+        try:
+            book = Book.query.get(id)
+            result.append({"id": book.id})
+            result.append({"title": book.title})
+            result.append({"author": book.author})
+            result.append({"publication": book.publication})
+            return jsonify(result)
+        except AttributeError as err:
+            return Response(status=404)
     else:
-        return "ERROR : No id provided for book record, please specify a book id."
-
-    result = []
-
-    try:
-        book = Book.query.get(id)
-        result.append({"id": book.id})
-        result.append({"title": book.title})
-        result.append({"author": book.author})
-        result.append({"publication": book.publication})
-        return jsonify(result)
-    except AttributeError as err:
-        return "Error : Invalid book id"
+        return Response(status=404)
 
 
 @app.route('/books-api/v1/resources/add', methods=['POST'])
 def addBook():
 
-    if request.method == 'POST':
-        book = Book(title=request.json['title'], author=request.json['author'],
-                    publication=request.json['publication'])
-        db.session.add(book)
-        db.session.commit()
-    else:
-        return "ERROR : Invalid data, please specify id"
+    if request.method != 'POST':
+        return Response(status=405)
 
-    return jsonify("ok")
+    elif request.method == 'POST':
+        try:
+            book = Book(title=request.json['title'], author=request.json['author'],
+                        publication=request.json['publication'])
+            db.session.add(book)
+            db.session.commit()
+            return jsonify("ok")
+        except Exception as err:
+            return Response(status=400)
 
 
 @app.route('/books-api/v1/resources/delete', methods=['DELETE'])
 def deleteBook():
 
-    if 'id' in request.args.keys():
-        id = int(request.args['id'])
-    else:
-        return "Error : Book id is missing!"
-    if request.method == 'DELETE':
-        id = int(request.args['id'])
-        try:
-            book = Book.query.filter_by(id=id).one()
-            db.session.delete(book)
-            db.session.commit()
-            return jsonify('ok')
-        except NoResultFound as err:
-            return "Error : Invalid book id"
+    if request.method != 'DELETE':
+        return Response(status=405)
+
+    elif request.method == 'GET':
+        if 'id' in request.args.keys():
+            id = int(request.args['id'])
+            if not isinstance(id, int) or id < 0:
+                return Response(status=400)
+            try:
+                book = Book.query.filter_by(id=id).one()
+                db.session.delete(book)
+                db.session.commit()
+                return jsonify('ok')
+            except NoResultFound as err:
+                return Response(status=404)
 
 
 @app.route('/books-api/v1/resources/update', methods=['PUT'])

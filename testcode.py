@@ -25,4 +25,9 @@ def add():
 
 if __name__ == "__main__":
     # testcode()
-    add()
+    # add()
+    x = "45"
+    try:
+        int(x, base=10)
+    except TypeError as err:
+        print(err)
