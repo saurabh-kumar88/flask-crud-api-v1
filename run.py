@@ -168,11 +168,13 @@ def deleteBook():
     if request.method != 'DELETE':
         return Response(status=405)
 
-    elif request.method == 'GET':
-        if 'id' in request.args.keys():
-            id = int(request.args['id'])
-            if not isinstance(id, int) or id < 0:
+    if request.method == 'DELETE':
+        if 'id' in request.args:
+            try:
+                id = int(request.args['id'])
+            except ValueError as err:
                 return Response(status=400)
+
             try:
                 book = Book.query.filter_by(id=id).one()
                 db.session.delete(book)
@@ -180,38 +182,46 @@ def deleteBook():
                 return jsonify('ok')
             except NoResultFound as err:
                 return Response(status=404)
+        else:
+            return Response(status=404)
 
 
 @app.route('/books-api/v1/resources/update', methods=['PUT'])
 def updateBook():
     result = []
-    if 'id' in request.args.keys():
-        id = int(request.args['id'])
-    else:
-        return "Error : Book id is missing!"
+    if request.method != 'PUT':
+        return Response(status=405)
 
     if request.method == 'PUT':
-        try:
-            book = Book.query.get(id)
-            if 'title' in request.json.keys():
-                book.title = request.json['title']
-            if 'author' in request.json.keys():
-                book.author = request.json['author']
-            if 'publication' in request.json.keys():
-                book.publication = request.json['publication']
+        if 'id' in request.args:
+            try:
+                id = int(request.args['id'])
+            except ValueError as err:
+                return Response(status=400)
 
-            db.session.add(book)
-            db.session.commit()
+            try:
+                book = Book.query.get(id)
+                if 'title' in request.json.keys():
+                    book.title = request.json['title']
+                if 'author' in request.json.keys():
+                    book.author = request.json['author']
+                if 'publication' in request.json.keys():
+                    book.publication = request.json['publication']
 
-            result.append({'id': book.id})
-            result.append({'title': book.title})
-            result.append({'author': book.author})
-            result.append({'publication': book.publication})
-            result.append({'created_At': book.created_At})
-            result.append({'updated_At': book.updated_At})
-            return jsonify("ok")
-        except AttributeError as err:
-            return "Error : Invalid book id"
+                db.session.add(book)
+                db.session.commit()
+
+                result.append({'id': book.id})
+                result.append({'title': book.title})
+                result.append({'author': book.author})
+                result.append({'publication': book.publication})
+                result.append({'created_At': book.created_At})
+                result.append({'updated_At': book.updated_At})
+                return jsonify("ok")
+            except AttributeError as err:
+                return Response(status=400)
+        else:
+            return Response(status=404)
 
 
 # Run the development server

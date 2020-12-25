@@ -125,35 +125,36 @@ class APITestCase_check_status_code(unittest.TestCase):
             'title': 'Submarines',
         }
         response = requests.put(
-            'http://localhost:8080/books-api/v1/resources/update?id=8',
+            'http://localhost:8080/books-api/v1/resources/update?id=19',
             json=data)
         self.assertEqual(response.status_code, 200)
 
-    # negative test with invalid inputs
-    # def test2_update(self):
-    #     data = {
-    #         'title': 'Submarines',
-    #     }
-    #     response = requests.put(
-    #         'http://localhost:8080/books-api/v1/resources/update?id=8',
-    #         json=data)
-    #     self.assertEqual(response.status_code, 200)
+    # negative test with invalid method
+    def test2_update(self):
+        data = {
+            'title': 'Submarines',
+        }
+        response = requests.get(
+            'http://localhost:8080/books-api/v1/resources/update?id=19',
+            json=data)
+        self.assertEqual(response.status_code, 405)
 
-    # def test3_update(self):
-    #     data = {
-    #         'title': 'Submarines',
-    #     }
-    #     response = requests.put(
-    #         'http://localhost:8080/books-api/v1/resources/update?id=8',
-    #         json=data)
-    #     self.assertEqual(response.status_code, 200)
+    # negative test with invalid input
+    def test3_update(self):
+        data = {
+            'title': 'Submarines',
+        }
+        response = requests.put(
+            'http://localhost:8080/books-api/v1/resources/update?id=foo-bar',
+            json=data)
+        self.assertEqual(response.status_code, 400)
 
-    # positive test with valid input
+    # negative test with invlaid url
     def test1_delete(self):
 
         response = requests.delete(
-            'http://localhost:8080/books-api/v1/resources/delete?id=21')
-        self.assertEqual(response.status_code, 200)
+            'http://localhost:8080/books-api/v1/resources/delete/*/*(&*')
+        self.assertEqual(response.status_code, 404)
 
     # negative test : invalid id
     def test2_delete(self):
@@ -172,7 +173,7 @@ class APITestCase_check_status_code(unittest.TestCase):
     # negative test : missing id or invlid url
     def test4_delete(self):
 
-        response = requests.put(
+        response = requests.delete(
             'http://localhost:8080/books-api/v1/resources/delete')
         self.assertEqual(response.status_code, 404)
 
