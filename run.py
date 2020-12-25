@@ -5,6 +5,8 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_script import Manager
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import asc, desc
+
 
 # init Flask
 app = Flask(__name__)
@@ -102,13 +104,128 @@ def home():
         return Response(status=404)
 
 
+@app.route('/books-api/v1/resources/get-books', methods=['GET'])
+def get_All():
+    search_param = {
+        'title': None,
+        'author': None,
+        'publication': None,
+        'created_At': None,
+    }
+    result = []
+    if request.method != 'GET':
+        return Response(status=405)
+
+    if request.method == 'GET':
+        if 'title' in request.args:
+            search_param['title'] = request.args['title']
+        if 'auhtor' in request.args:
+            search_param['author'] = request.args['author']
+        if 'publication' in request.args:
+            search_param['publication'] = request.args['publication']
+        if 'created_At' in request.args:
+            search_param['created_At'] = request.args['created_At']
+        print("_________________________________________________________")
+        print(search_param['title'])
+        books = Book.query.filter_by(title=search_param['title'],
+                                     )
+
+        for book in books:
+            result.append({"id": book.id})
+            result.append({"title": book.title})
+            result.append({"author": book.author})
+            result.append({"publcation": book.publication})
+            result.append({"created_At": book.created_At})
+            result.append({"updated_At": book.updated_At})
+        return jsonify(result)
+    else:
+        return Response(status=404)
+
+
 @app.route('/books-api/v1/resources/getAll', methods=['GET'])
 def getAll():
 
     if request.method != 'GET':
         return Response(status=405)
-    elif request.method == 'GET':
-        books = Book.query.all()
+
+    if request.method == 'GET':
+
+        # --- optional query parameters ---
+
+        # sqlalchemy query : sort by field name
+        if 'sort' in request.args:
+            sort = request.args['sort']
+            if sort == 'title':
+                books = Book.query.order_by(Book.title).all()
+            elif sort == 'author':
+                books = Book.query.order_by(Book.author).all()
+            elif sort == 'latest':
+                books = Book.query.order_by(asc(Book.created_At)).all()
+            elif sort == 'oldest':
+                books = Book.query.order_by(desc(Book.created_At)).all()
+            else:
+                return Response(status=404)
+        if 'limit' in request.args:
+            try:
+                Limit = int(request.args['limit'])
+            except ValueError as err:
+                return Response(status=400)
+            if Limit < 0:
+                return Response(status=400)
+            # sqlalchemy query : limit 'n' results
+            try:
+                books = Book.query.limit(Limit)
+            except Exception as err:
+                return Response(status=400)
+        if 'skip' in request.args:
+            try:
+                skip = int(request.args['skip'])
+            except ValueError as err:
+                return Response(status=400)
+            if skip < 0:
+                return Response(status=400)
+            # sqlalchemy query : skip 'n' initial results
+            try:
+                books = Book.query.offset(skip).all()
+            except Exception as err:
+                return Response(status=400)
+        if 'page' in request.args:
+            try:
+                page = int(request.args['page'])
+            except ValueError as err:
+                return Response(status=400)
+            if page < 0:
+                return Response(status=400)
+            # sqlalchemy query : pagination
+            try:
+                books = Book.query.paginate(
+                    page, per_page=5, error_out=False).items
+            except Exception as err:
+                return Response(status=400)
+        # ----------- search query ----------------
+        search_param = {
+            'title': None,
+            'author': None,
+            'publication': None,
+            'created_At': None,
+        }
+
+        if 'title' in request.args:
+            search_param['title'] = request.args['title']
+        elif 'auhtor' in request.args:
+            search_param['author'] = request.args['author']
+        elif 'publication' in request.args:
+            search_param['publication'] = request.args['publication']
+        elif 'created_At' in request.args:
+            search_param['created_At'] = request.args['created_At']
+        else:
+            books = Book.query.all()
+
+        books = Book.query.filter_by(title=search_param['title'],
+                                     author=search_param['author'],
+                                     publication=search_param['publication'],
+                                     created_At=search_param['created_At'])
+
         result = []
         for book in books:
             result.append({"id": book.id})
@@ -118,6 +235,8 @@ def getAll():
             result.append({"created_At": book.created_At})
             result.append({"updated_At": book.updated_At})
         return jsonify(result)
+    else:
+        return Response(status=404)
 
 
 @app.route('/books-api/v1/resources/getbook', methods=['GET'])
