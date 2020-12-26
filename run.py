@@ -104,43 +104,6 @@ def home():
         return Response(status=404)
 
 
-@app.route('/books-api/v1/resources/get-books', methods=['GET'])
-def get_All():
-    search_param = {
-        'title': None,
-        'author': None,
-        'publication': None,
-        'created_At': None,
-    }
-    result = []
-    if request.method != 'GET':
-        return Response(status=405)
-
-    if request.method == 'GET':
-        if 'title' in request.args:
-            search_param['title'] = request.args['title']
-        if 'auhtor' in request.args:
-            search_param['author'] = request.args['author']
-        if 'publication' in request.args:
-            search_param['publication'] = request.args['publication']
-        if 'created_At' in request.args:
-            search_param['created_At'] = request.args['created_At']
-        print("_________________________________________________________")
-        print(search_param['title'])
-        books = Book.query.filter_by(title=search_param['title'])
-
-        for book in books:
-            result.append({"id": book.id})
-            result.append({"title": book.title})
-            result.append({"author": book.author})
-            result.append({"publcation": book.publication})
-            result.append({"created_At": book.created_At})
-            result.append({"updated_At": book.updated_At})
-        return jsonify(result)
-    else:
-        return Response(status=404)
-
-
 @app.route('/books-api/v1/resources/getAll', methods=['GET'])
 def getAll():
 
@@ -229,6 +192,10 @@ def getBook():
             id = int(request.args['id'])
         except ValueError as err:
             return Response(status=400)
+
+        if id < 0:
+            return Response(status=400)
+
         try:
             book = Book.query.get(id)
             result.append({"id": book.id})
@@ -239,24 +206,44 @@ def getBook():
         except AttributeError as err:
             return Response(status=404)
 
-    # obj = Book()
-    # if 'title' in request.args:
-    #     session.query.filter_by(title=request.args['title'])
-    # if 'author' in request.args:
-    #     books = obj.query.filter_by(author=request.args['author'])
-    # if 'publication' in request.args:
-    #     books = obj.query.filter_by(publication=request.args['publication'])
+    if 'title' in request.args and 'author' in request.args:
+        try:
+            Book.query.filter_by(
+                title=request.args['title'], author=request.args['author']).all()
+        except NoResultFound as err:
+            return Response(status=404)
+        else:
+            books = Book.query.filter_by(
+                title=request.args['title'], author=request.args['author'])
 
-    #     for book in books:
-    #         result.append({"id": book.id})
-    #         result.append({"title": book.title})
-    #         result.append({"author": book.author})
-    #         result.append({"publcation": book.publication})
-    #         result.append({"created_At": book.created_At})
-    #         result.append({"updated_At": book.updated_At})
-    #     return jsonify(result)
+    if 'title' in request.args:
+        try:
+            Book.query.filter_by(title=request.args['title']).all()
+        except NoResultFound as err:
+            return Response(status=404)
+        else:
+            books = Book.query.filter_by(
+                title=request.args['title'])
 
-    return Response(status=404)
+    if 'author' in request.args:
+        try:
+            Book.query.filter_by(author=request.args['author']).all()
+        except NoResultFound as err:
+            return Response(status=404)
+        else:
+            books = Book.query.filter_by(
+                author=request.args['author'])
+
+    for book in books:
+        result.append({"id": book.id})
+        result.append({"title": book.title})
+        result.append({"author": book.author})
+        result.append({"publcation": book.publication})
+        result.append({"created_At": book.created_At})
+        result.append({"updated_At": book.updated_At})
+    if len(result) == 0:
+        return Response(status=404)
+    return jsonify(result)
 
 
 @app.route('/books-api/v1/resources/add', methods=['POST'])
