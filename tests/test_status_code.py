@@ -8,17 +8,17 @@ class APITestCase_check_status_code(unittest.TestCase):
     # check status code
     def test_index(self):
         response = requests.get(
-            'http://localhost:8080/books-api/v1/resources/')
+            'http://localhost:8080/')
         self.assertEqual(response.status_code, 200)
 
     def test2_index(self):
         response = requests.get(
-            'http://localhost:8080/books-api/v1/resources/home///')
+            'http://localhost:8080/())*(*???//')
         self.assertEqual(response.status_code, 404)
 
     def test3_index(self):
         response = requests.post(
-            'http://localhost:8080/books-api/v1/resources/')
+            'http://localhost:8080/')
         self.assertEqual(response.status_code, 405)
 
     def test1_home(self):

@@ -7,16 +7,6 @@ import json
 
 class APITestCase_check_data(unittest.TestCase):
 
-    def test_index(self):
-        response = requests.get(
-            'http://localhost:8080/books-api/v1/resources/')
-        self.assertTrue(b'ok' in response.content)
-
-    def test_home(self):
-        response = requests.get(
-            'http://localhost:8080/books-api/v1/resources/home')
-        self.assertTrue(b'Welcome' in response.content)
-
     def test_getAll(self):
         response = requests.get(
             'http://localhost:8080/books-api/v1/resources/getAll')
