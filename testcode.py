@@ -31,3 +31,6 @@ if __name__ == "__main__":
         int(x, base=10)
     except TypeError as err:
         print(err)
+
+
+# "sudo rsync -rv C:\Projects\PYTHON\API\FLASK-CRUD-API/ ubuntu@192.168.1.1:/home/ubuntu/flask_api"

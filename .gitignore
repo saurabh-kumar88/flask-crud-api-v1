@@ -6,3 +6,5 @@ app.db
 env
 venv
 *.sublime*
+.ini
+testcode.py

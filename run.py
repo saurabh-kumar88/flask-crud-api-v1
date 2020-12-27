@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -74,32 +74,23 @@ admin = Admin(app, name='Flask crud api', template_mode='bootstrap4')
 admin.add_view(ModelView(Book, db.session))
 
 
-@app.route('/books-api/v1/resources/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def index():
     if request.method != 'GET':
         return Response(status=405)
     elif request.method == 'GET':
-        return jsonify({'Message': 'ok'})
+        return render_template('index.html')
     else:
         return Response(status=404)
 
 
-@app.route('/books-api/v1/resources/home', methods=['GET'])
+@app.route('/books-api/v1/resources/', methods=['GET'])
 def home():
     if request.method != 'GET':
         return Response(405)
 
     elif request.method == 'GET':
-        return '''
-        <h1>Welcome to flask-crud api demo</h1>
-        <ol>
-            <li>crud-api/getAll : get all books record</li>
-            <li>crud-api/getbook/id : get a book record by its id</li>
-            <li>crud-api/add : add new book</li>
-            <li>crud-api/delete/id : remove a book record</li>
-            <li>crud-api/put/id : update a book record</li>
-        </ol>
-        '''
+        return render_template('index.html')
     else:
         return Response(status=404)
 

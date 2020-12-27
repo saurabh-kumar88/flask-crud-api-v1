@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flask CRUD API</title>
+    <style>
+      table,td, th {
+        border: 1px solid black;
+        
+      }
+      #url{
+        width: max-content;
+      }
+      
+      </style>
+      </head>
+  </head>
+  <body>
+
+    <div style="margin-left:20%; margin-top:5%;">
+      <h1>Flask-crud api end-points</h1>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>End point</th>
+          <th>Description</th>
+          <th>Response</th>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td id='url'>/books-api/v1/resources/</td>
+          <td>index page</td>
+          <td>text/html; charset=utf-8</td>
+        </tr>
+        <<tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getAll</td>
+          <td>Get all records</td>
+          <td>Applicattion/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getAll/sort?=oldest</td>
+          <td>sort record : oldest, latest, title, author</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getAll/limit?=n</td>
+          <td>limit results by n numbers</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getAll/skip?=n</td>
+          <td>skip n initial records</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getAll/sort?oldest</td>
+          <td>oldest, latest, title, author</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getbook?id=n</td>
+          <td>get record by id</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getbook?auhor=hg wells</td>
+          <td>filter records by author</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getbook?title=time machine</td>
+          <td>filter records by title</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getbook?title=war of worlds&auhor=hg wells</td>
+          <td>filter records by title & author</td>
+          <td>Application/json</td>
+        </tr>
+
+        <tr>
+          <td>POST</td>
+          <td>/books-api/v1/resources/add</td>
+          <td>add new record</td>
+          <td>Application/json</td>
+        </tr>
+
+        <tr>
+          <td>PUT</td>
+          <td>/books-api/v1/resources/update?id=n</td>
+          <td>update record of valid id</td>
+          <td>Application/json</td>
+        </tr>
+
+        <tr>
+          <td>DELETE</td>
+          <td>/books-api/v1/resources/delete?id=n</td>
+          <td>delete record of valid id</td>
+          <td>Application/json</td>
+        </tr>
+      </table>  
+    </div>
+  </body>
+</html>
