@@ -65,7 +65,7 @@ if 0:
     db.drop_all()
 
 # create table and insert dummy data
-if 0:
+if 1:
     db.create_all()
     dummyData()
 
