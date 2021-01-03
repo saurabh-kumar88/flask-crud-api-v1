@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # Basic config with security for forms and session cookie
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('HEROKU_DATABASE_URI')
 app.config['CSRF_ENABLED'] = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
@@ -65,7 +65,7 @@ if 0:
     db.drop_all()
 
 # create table and insert dummy data
-if 1:
+if 0:
     db.create_all()
     dummyData()
 
@@ -314,9 +314,3 @@ def updateBook():
                 return Response(status=400)
         else:
             return Response(status=404)
-
-
-# Run the development server
-if __name__ == "__main__":
-    # manager.run()
-    app.run(host='0.0.0.0', port=5000, debug=True)

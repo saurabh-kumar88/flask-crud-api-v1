@@ -41,25 +41,31 @@
         </tr>
         <tr>
           <td>GET</td>
-          <td>/books-api/v1/resources/getAll/sort?=oldest</td>
+          <td>/books-api/v1/resources/getAll?page=n</td>
+          <td>Pagination, get m records per n page</td>
+          <td>Application/json</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/books-api/v1/resources/getAll?sort=oldest</td>
           <td>sort record : oldest, latest, title, author</td>
           <td>Application/json</td>
         </tr>
         <tr>
           <td>GET</td>
-          <td>/books-api/v1/resources/getAll/limit?=n</td>
+          <td>/books-api/v1/resources/getAll?limit=n</td>
           <td>limit results by n numbers</td>
           <td>Application/json</td>
         </tr>
         <tr>
           <td>GET</td>
-          <td>/books-api/v1/resources/getAll/skip?=n</td>
+          <td>/books-api/v1/resources/getAll?skip=n</td>
           <td>skip n initial records</td>
           <td>Application/json</td>
         </tr>
         <tr>
           <td>GET</td>
-          <td>/books-api/v1/resources/getAll/sort?oldest</td>
+          <td>/books-api/v1/resources/getAll?sort=oldest</td>
           <td>oldest, latest, title, author</td>
           <td>Application/json</td>
         </tr>
