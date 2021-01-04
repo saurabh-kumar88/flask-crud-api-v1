@@ -13,8 +13,9 @@ app = Flask(__name__)
 
 # Basic config with security for forms and session cookie
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('HEROKU_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['CSRF_ENABLED'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
@@ -26,7 +27,7 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), unique=False, nullable=False)
     author = db.Column(db.String(25), unique=False, nullable=False)
-    publication = db.Column(db.String(20), nullable=False)
+    publication = db.Column(db.String(25), nullable=False)
     created_At = db.Column(db.DateTime, server_default=db.func.now())
     updated_At = db.Column(
         db.DateTime, onupdate=db.func.now())
@@ -61,13 +62,16 @@ def dummyData():
 
 
 # drop all tables
-if 0:
+if 1:
     db.drop_all()
 
 # create table and insert dummy data
 if 0:
     db.create_all()
     dummyData()
+
+def dropAll():
+    db.drop_all()
 
 # admin
 admin = Admin(app, name='Flask crud api', template_mode='bootstrap4')

@@ -1,5 +1,5 @@
 from flask_script import Manager
-from app import app, db, dummyData
+from app import app, db, dummyData, dropAll
 from flask_migrate import Migrate, MigrateCommand
 
 
@@ -11,7 +11,7 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def drop_all_tables():
-    db.drop_all()
+    dropAll()
 
 
 @manager.command
