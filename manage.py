@@ -18,6 +18,11 @@ def drop_all_tables():
 def init_dummy_data():
     dummyData()
 
+@manager.command
+def hello():
+    print('hello world')
+
+
 
 @manager.command
 def runserver():

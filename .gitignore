@@ -148,3 +148,4 @@ migrations
 .png
 .jpeg
 testcode.py
+.env
