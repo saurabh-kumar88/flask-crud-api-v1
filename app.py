@@ -13,7 +13,8 @@ app = Flask(__name__)
 
 # Basic config with security for forms and session cookie
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LOCAL_MYSQL_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('HEROKU_POSTGRESQL_URI')
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -70,8 +71,10 @@ if 0:
     db.create_all()
     dummyData()
 
+
 def dropAll():
     db.drop_all()
+
 
 # admin
 admin = Admin(app, name='Flask crud api', template_mode='bootstrap4')
