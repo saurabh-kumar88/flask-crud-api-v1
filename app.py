@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request, Response, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -12,6 +13,8 @@ from sqlalchemy import asc, desc
 app = Flask(__name__)
 
 # Basic config with security for forms and session cookie
+
+load_dotenv()
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LOCAL_MYSQL_URI')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('HEROKU_POSTGRESQL_URI')
