@@ -17,7 +17,8 @@ app = Flask(__name__)
 load_dotenv()
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LOCAL_MYSQL_URI')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('HEROKU_POSTGRESQL_URI')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('FREEDB_TECH')
+
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -66,7 +67,7 @@ def dummyData():
 
 
 # drop all tables
-if 1:
+if 0:
     db.drop_all()
 
 # create table and insert dummy data
