@@ -12,14 +12,18 @@
       #url{
         width: max-content;
       }
+      .github {
+        margin-left: 10%;
+        font-size: x-large;
+      }
       
       </style>
       </head>
   </head>
   <body>
 
-    <div style="margin-left:20%; margin-top:5%;">
-      <h1>Flask-crud api end-points</h1>
+    <div style="margin-left:10%; margin-top:5%;">
+      <h1 style="margin-left:25%; color: green;">Flask-crud api end-points</h1>
       <table>
         <tr>
           <th>Method</th>
@@ -99,6 +103,7 @@
           <td>/books-api/v1/resources/add</td>
           <td>Add new book
             <br>
+            <br>
             body = {
               "title"       : "book title",
               "author"      : "author name",
@@ -111,17 +116,21 @@
         <tr>
           <td>PUT</td>
           <td>/books-api/v1/resources/update?id=n</td>
-          <td>Update record of valid id</td>
+          <td>Update record with valid id</td>
           <td>Application/json</td>
         </tr>
 
         <tr>
           <td>DELETE</td>
           <td>/books-api/v1/resources/delete?id=n</td>
-          <td>delete record of valid id</td>
+          <td>Delete record with valid id</td>
           <td>Application/json</td>
         </tr>
       </table>  
     </div>
   </body>
+
+  <div class="github">
+    <p><a href="https://github.com/saurabh-kumar88/flask-crud-api-v1" target="_blank">GitHub Repository</a></p>
+  </div>
 </html>

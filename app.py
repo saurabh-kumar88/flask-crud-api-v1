@@ -16,9 +16,6 @@ app = Flask(__name__)
 
 load_dotenv()
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LOCAL_MYSQL_URI')
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('FREEDB_TECH')
-
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
