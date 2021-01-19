@@ -53,6 +53,8 @@ def dummyData():
                   "author": "Book by Rupi Kaur", "publication": "2020-11-17"})
     books.append({"title": "The Ickabog",
                   "author": "Book by J. K. Rowling", "publication": "2020-11-10"})
+    books.append({"title": "Tanet",
+                  "author": "Kristopher nolan", "publication": "2020-02-29"})
 
     for data in books:
         dummy_data = Book(
