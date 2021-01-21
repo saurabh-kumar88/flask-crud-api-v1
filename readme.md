@@ -1,14 +1,10 @@
 <h1><b>Live at http://flask-crud-api-v1.herokuapp.com/</b></h1>
 
-<h4>Step 1: copy this repository github link</h4>
-<br>
-<img src="https://github.com/saurabh-kumar88/flask-crud-api-v1/blob/main/docs/clone%20repo.png">
-<br>
-<h4>Step 1.1: Create your project folder/dir</h4>
-<br>
-<h4>Step 1.2: cd to project folder</h4>
-<br>
-<h4>Step 1.3: Clone repository -> run git clone "link"</h4>
+<h4>Step 1: copy this repository github link</h4><br>
+<img src="https://github.com/saurabh-kumar88/flask-crud-api-v1/blob/main/docs/clone%20repo.png"><br>
+<h4>Step 1.1: Create your project folder/dir</h4><br>
+<h4>Step 1.2: cd to project folder</h4><br>
+<h4>Step 1.3: Clone repository -> run git clone "link"</h4><br>
 <br>
 <h4>Step 2: cd to colned project dir</h4>
 <br>
