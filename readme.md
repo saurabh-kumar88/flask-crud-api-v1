@@ -1,12 +1,15 @@
 <h1><b>Live at http://flask-crud-api-v1.herokuapp.com/</b></h1>
 
-<h3>Step 1: copy this repository github link</h3>
+<h5>Step 1: copy this repository github link</h5>
 <br>
-<img src=>
+<img src="https://github.com/saurabh-kumar88/flask-crud-api-v1/blob/main/docs/clone%20repo.png">
 <br>
-Step 1.1: Create your project folder/dir
-Step 1.2: cd to project folder
-Step 1.3: Clone repository -> run git clone "link"
+<br>
+<h5>Step 1.1: Create your project folder/dir</h5>
+<br>
+<h5>Step 1.2: cd to project folder</h5>
+<br>
+<h5>Step 1.3: Clone repository -> run git clone "link"</h5>
 
 Step 2: cd to colned project dir
 Step 2.1: create virtual environment needed to install python dependecies by running following command
@@ -30,7 +33,7 @@ DEBUG=True
 step 5: Start dev server by
 <b>run python manage.py runserver</b>
 if every things okay then you should get then your console will looks like this
-<img src="console">
+<img src="https://github.com/saurabh-kumar88/flask-crud-api-v1/blob/main/docs/console%20running%20dev%20server.png">
 
 step 6: API endpoints description
 
