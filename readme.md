@@ -6,7 +6,7 @@
 <h4>Step 1.2: cd to project folder</h4>
 <h4>Step 1.3: Clone repository -> run git clone "link"</h4>
 <h4>Step 2: cd to colned project dir</h4>
-<h4>Step 2.1: create virtual environment needed to install python dependecies by</h4>
+<h4>Step 2.1: create virtual environment to install python dependecies by</h4>
 <h4>run python -m virtualenv venv</h4>
 <h4>Step 2.2: cd venv/Scripts then run ./activate or activate (this will activate virtual environment)</h4>
 <h4>Step 2.3: TO disable virtual environment just run deactivate</h4>
@@ -22,7 +22,7 @@
 <h4>DEBUG=True</h4>
 <h4>step 5: Start dev server by</h4>
 <h4>run python manage.py runserver</h4>
-<h4>if every things okay then you should get then your console will looks like this</h4><br>
+<h4>if every things okay then your console should look like this</h4><br>
 <img src="https://github.com/saurabh-kumar88/flask-crud-api-v1/blob/main/docs/console%20running%20dev%20server.png">
 <br>
 <h1>API endpoints description</h1>
