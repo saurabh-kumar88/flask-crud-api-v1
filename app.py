@@ -174,7 +174,7 @@ def getAll():
             result.append({"id": book.id})
             result.append({"title": book.title})
             result.append({"author": book.author})
-            result.append({"publcation": book.publication})
+            result.append({"publication": book.publication})
             result.append({"created_At": book.created_At})
             result.append({"updated_At": book.updated_At})
         return jsonify(result)
@@ -240,7 +240,7 @@ def getBook():
         result.append({"id": book.id})
         result.append({"title": book.title})
         result.append({"author": book.author})
-        result.append({"publcation": book.publication})
+        result.append({"publication": book.publication})
         result.append({"created_At": book.created_At})
         result.append({"updated_At": book.updated_At})
     if len(result) == 0:
